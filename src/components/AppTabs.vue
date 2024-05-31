@@ -20,7 +20,7 @@
 <script>
 import MyComponent1 from '@/components/MyComponent1.vue';
 import MyComponent2 from '@/components/MyComponent2.vue';
-import OrderDetails from '@/components/OrderDetails.vue';
+
 
 export default {
   data() {
@@ -33,21 +33,7 @@ export default {
     };
   },
   methods: {
-    addOrderDetailsTab(order) {
-      const existingTab = this.tabs.find(tab => tab.label === `Заявка ${order.id}`);
-      if (existingTab) {
-        this.activeTab = this.tabs.indexOf(existingTab);
-      } else {
-        this.tabs.push({ label: `Заявка ${order.id}`, component: OrderDetails, data: order });
-        this.activeTab = this.tabs.length - 1;
-      }
-    }
-  },
-  created() {
-    this.$root.$on('open-order-tab', this.addOrderDetailsTab);
-  },
-  beforeDestroy() {
-    this.$root.$off('open-order-tab', this.addOrderDetailsTab);
+    
   }
 };
 </script>

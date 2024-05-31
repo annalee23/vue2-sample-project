@@ -1,36 +1,24 @@
 <template>
-    <div class="container">
-      <h2>Открытие счетов</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Город</th>
-              <th>Клиент</th>
-              <th>Банк</th>
-              <th>Продукт</th>
-              <th>Статус</th>
-              <th>Дата встречи</th>
-              <th>Место встречи</th>
-              <th>Телефон</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="meeting in meetingsList" :key="meeting.id">
-              <td>{{ meeting.client_city }}</td>
-              <td>{{ meeting.client_name }}</td>
-              <td>{{ meeting.bank_name }}</td>
-              <td>{{ meeting.stg.join(', ') }}</td>
-              <td :class="statusClass(meeting.meeting_state)">{{ meeting.meeting_state }}</td>
-              <td>{{ formatDate(meeting.meeting_date) }}</td>
-              <td>{{ meeting.meeting_place }}</td>
-              <td>{{ meeting.person_phone }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </template>
+  <div class="container">
+    <h2>Открытие счетов</h2>
+    <v-data-table
+      :headers="headers"
+      :items="meetingsList"
+      :items-per-page="5"
+      class="elevation-1"
+    >
+      <template v-slot:[`item.stg`]="{ item }">
+        <span>{{ item.stg.join(', ') }}</span>
+      </template>
+      <template v-slot:[`item.meeting_date`]="{ item }">
+        <span>{{ formatDate(item.meeting_date) }}</span>
+      </template>
+      <template v-slot:[`item.meeting_state`]="{ item }">
+        <span :class="statusClass(item.meeting_state)">{{ item.meeting_state }}</span>
+      </template>
+    </v-data-table>
+  </div>
+</template>
   
   <script>
   import { mapState } from 'vuex';
@@ -39,7 +27,19 @@
   
   export default {
     computed: {
-      ...mapState(['meetingsList'])
+      ...mapState(['meetingsList']),
+      headers() {
+        return [
+          { text: 'Город', value: 'client_city' },
+          { text: 'Клиент', value: 'client_name' },
+          { text: 'Банк', value: 'bank_name' },
+          { text: 'Продукт', value: 'stg' },
+          { text: 'Статус', value: 'meeting_state' },
+          { text: 'Дата встречи', value: 'meeting_date' },
+          { text: 'Место встречи', value: 'meeting_place' },
+          { text: 'Телефон', value: 'person_phone' }
+        ];
+      }
     },
     methods: {
     formatDate(date) {
@@ -54,6 +54,15 @@
         'status-reupload_fls': status === 'reupload_fls',
       };
     }
+  },
+  openOrderDetails({ item }) {
+      this.$store.dispatch('fetchOrderDetails', item.id)
+        .then(() => {
+          this.$root.$emit('open-order-tab', this.$store.state.currentOrder);
+        })
+        .catch(error => {
+          console.error('Ошибка при загрузке данных заявки:', error);
+        });
   },
   mounted() {
     this.$store.dispatch('fetchMeetingsList');
@@ -71,49 +80,35 @@
     text-align: center;
   }
   
-  .table-container {
-    margin-top: 30px;
-    overflow-x: auto; 
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed; 
-  }
-  
-  th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 12px;
-    word-wrap: break-word;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0; 
-    background: #fff;
-  }
-
   .status-init {
-  background-color: #ffe0b2; /* Оранжевый */
-}
+    color: #ff6f00; /* Ярко-оранжевый */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-error {
-  background-color: #ffccbc; /* Персиковый */
-}
+  .status-error {
+    color: #d32f2f; /* Ярко-красный */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-upload_docs {
-  background-color: #b2ebf2; /* Голубой */
-}
+  .status-upload_docs {
+    color: #0288d1; /* Ярко-голубой */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-process {
-  background-color: #c8e6c9; /* Зеленый */
-}
+  .status-process {
+    color: #388e3c; /* Ярко-зеленый */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-reupload_fls {
-  background-color: #e1bee7; /* Фиолетовый */
-}
+  .status-reupload_fls {
+    color: #7b1fa2; /* Ярко-фиолетовый */
+    font-weight: bold;
+    padding: 5px;
+  }
+
   </style>
   

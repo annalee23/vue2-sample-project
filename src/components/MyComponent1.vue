@@ -1,32 +1,43 @@
 <template>
-    <div class="container">
-      <h2>Список заявок</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>№ Заявки</th>
-              <th>Продукт</th>
-              <th>Дата</th>
-              <th>Клиент</th>
-              <th>Статус</th>
-              <th>Телефон</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="order in ordersList" :key="order.id" @click="openOrderDetails(order.id)">
-              <td>{{ order.num }}</td>
-              <td>{{ order.stg.join(', ') }}</td>
-              <td>{{ formatDate(order.dadd) }}</td>
-              <td>{{ order.client_name }}</td>
-              <td :class="statusClass(order.state)">{{ order.state }}</td>
-              <td>{{ order.person_phone }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </template>
+  <div class="container">
+    <h2>Список заявок</h2>
+    <v-data-table
+      :headers="headers"
+      :items="ordersList"
+      class="elevation-1"
+    >
+      <template v-slot:[`item.stg`]="{ item }">
+        <span>{{ item.stg.join(', ') }}</span>
+      </template>
+      <template v-slot:[`item.dadd`]="{ item }">
+        <span>{{ formatDate(item.dadd) }}</span>
+      </template>
+      <template v-slot:[`item.state`]="{ item }">
+        <span :class="statusClass(item.state)">{{ item.state }}</span>
+      </template>
+    </v-data-table>
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card>
+        <v-card-title>
+          {{ dialogTitle }}
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="form">
+            <v-text-field v-model="editedItem.num" label="№ Заявки"></v-text-field>
+            <v-text-field v-model="editedItem.client_name" label="Клиент"></v-text-field>
+            <v-text-field v-model="editedItem.person_phone" label="Телефон"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="closeDialog">Отмена</v-btn>
+          <v-btn color="blue darken-1" text @click="saveItem">Сохранить</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-btn color="primary" @click="openDialog">Добавить заявку</v-btn>
+  </div>
+</template>
   
   <script>
   import { mapState } from 'vuex';
@@ -34,7 +45,17 @@
   
   export default {
     computed: {
-      ...mapState(['ordersList'])
+      ...mapState(['ordersList']),
+      headers() {
+        return [
+          { text: '№ Заявки', value: 'num' },
+          { text: 'Продукт', value: 'stg' },
+          { text: 'Дата', value: 'dadd' },
+          { text: 'Клиент', value: 'client_name' },
+          { text: 'Статус', value: 'state' },
+          { text: 'Телефон', value: 'person_phone' }
+       ];
+      }
     },
     methods: {
       formatDate(date) {
@@ -49,15 +70,36 @@
           'status-reupload_fls': status === 'reupload_fls',
         };
       },
-      openOrderDetails(orderId) {
-        this.$store.dispatch('fetchOrderDetails', orderId)
-          .then(order => {
-            this.$root.$emit('open-order-tab', order);
-          })
-          .catch(error => {
-            console.error('Ошибка при загрузке данных заявки:', error);
-          });
-      }
+      openOrderDetails({ item }) {
+      this.$store.dispatch('fetchOrderDetails', item.id)
+        .then(() => {
+          this.$root.$emit('open-order-tab', this.$store.state.currentOrder);
+        })
+        .catch(error => {
+          console.error('Ошибка при загрузке данных заявки:', error);
+        });
+      },
+      openDialog(item = null) {
+        this.dialogTitle = item ? 'Редактирование заявки' : 'Создание новой заявки';
+        this.editedItem = item ? Object.assign({}, item) : {};
+        this.dialog = true;
+      },
+      closeDialog() {
+        this.dialog = false;
+        this.$refs.form.reset(); 
+      },
+      saveItem() {
+        if (this.$refs.form.validate()) {
+          if (this.editedItem.id) {
+            // Редактирование существующей заявки
+            // Реализуйте логику редактирования заявки
+          } else {
+            // Создание новой заявки
+            // Реализуйте логику добавления новой заявки
+        }
+        this.closeDialog();
+        }
+      },
     },
     mounted() {
       this.$store.dispatch('fetchOrdersList');
@@ -74,53 +116,47 @@
     margin-bottom: 20px;
     text-align: center;
   }
-  
-  .table-container {
-    margin-top: 30px;
-    overflow-x: auto;
+
+  .v-data-footer {
+    display: flex;
+    justify-content: flex-end; 
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-  }
-  
-  th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 12px;
-    word-wrap: break-word;
-    cursor: pointer; 
-  }
-  
-  th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0;
-    background: #fff;
+
+  .v-data-footer__pagination,
+  .v-data-footer__select {
+    margin-left: auto; 
   }
   
   .status-init {
-    background-color: #ffe0b2; /* Оранжевый */
+    color: #ff6f00; /* Ярко-оранжевый */
+    font-weight: bold;
+    padding: 5px;
   }
-  
+
   .status-error {
-    background-color: #ffccbc; /* Персиковый */
+    color: #d32f2f; /* Ярко-красный */
+    font-weight: bold;
+    padding: 5px;
   }
-  
+
   .status-upload_docs {
-    background-color: #b2ebf2; /* Голубой */
+    color: #0288d1; /* Ярко-голубой */
+    font-weight: bold;
+    padding: 5px;
   }
-  
+
   .status-process {
-    background-color: #c8e6c9; /* Зеленый */
+    color: #388e3c; /* Ярко-зеленый */
+    font-weight: bold;
+    padding: 5px;
   }
-  
+
   .status-reupload_fls {
-    background-color: #e1bee7; /* Фиолетовый */
+    color: #7b1fa2; /* Ярко-фиолетовый */
+    font-weight: bold;
+    padding: 5px;
   }
-  
+
   tr:hover {
     background-color: #f5f5f5; /* Светло-серый */
   }
