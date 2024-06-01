@@ -1,20 +1,17 @@
 <template>
-  <v-card color="basil">
-    <v-tabs
-      v-model="activeTab"
-      background-color="transparent"
-      color="basil"
-      grow
-    >
-      <v-tab v-for="tab in tabs" :key="tab.label">{{ tab.label }}</v-tab>
-    </v-tabs>
+  <v-app>
+    <div class="mx-16">
+      <v-tabs v-model="activeTab" background-color="transparent" color="basil" grow>
+        <v-tab v-for="tab in tabs" :key="tab.label">{{ tab.label }}</v-tab>
+      </v-tabs>
 
-    <v-tabs-items v-model="activeTab">
-      <v-tab-item v-for="tab in tabs" :key="tab.label">
-        <component :is="tab.component" :data="tab.data" />
-      </v-tab-item>
-    </v-tabs-items>
-  </v-card>
+      <v-tabs-items v-model="activeTab">
+        <v-tab-item v-for="tab in tabs" :key="tab.label">
+          <component :is="tab.component" :data="tab.data" />
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+  </v-app>
 </template>
 
 <script>
@@ -33,7 +30,7 @@ export default {
     };
   },
   methods: {
-    
+
   }
 };
 </script>

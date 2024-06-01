@@ -1,19 +1,21 @@
 <template>
-  <div class="container">
-    <h2>Открытие счетов</h2>
+  <div class="mx-1">
+    <v-toolbar class="mt-6" flat>
+      <h2>Открытие счетов</h2>
+    </v-toolbar>
     <v-data-table
       :headers="headers"
       :items="meetingsList"
       :items-per-page="5"
       class="elevation-1"
     >
-      <template v-slot:[`item.stg`]="{ item }">
+      <template #[`item.stg`]="{ item }">
         <span>{{ item.stg.join(', ') }}</span>
       </template>
-      <template v-slot:[`item.meeting_date`]="{ item }">
+      <template #[`item.meeting_date`]="{ item }">
         <span>{{ formatDate(item.meeting_date) }}</span>
       </template>
-      <template v-slot:[`item.meeting_state`]="{ item }">
+      <template #[`item.meeting_state`]="{ item }">
         <span :class="statusClass(item.meeting_state)">{{ item.meeting_state }}</span>
       </template>
     </v-data-table>
@@ -71,9 +73,6 @@
   </script>
   
   <style scoped>
-  .container {
-    padding: 20px;
-  }
   
   h2 {
     margin-bottom: 20px;

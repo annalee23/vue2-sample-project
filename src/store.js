@@ -14,6 +14,10 @@ export default new Vuex.Store({
     setOrdersList(state, orders) {
       state.ordersList = orders;
     },
+    addNewItem(state, item) {
+      console.log(item);
+      state.ordersList.push(item);
+    },
     setMeetingsList(state, meetings) { 
       state.meetingsList = meetings;
     },
