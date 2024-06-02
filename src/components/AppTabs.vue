@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import MyComponent1 from '@/components/MyComponent1.vue';
-import MyComponent2 from '@/components/MyComponent2.vue';
+import MyComponent1 from '@/components/MyApplications.vue';
+import MyComponent2 from '@/components/MyAccounts.vue';
 
 
 export default {
