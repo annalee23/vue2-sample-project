@@ -1,18 +1,18 @@
 <template>
   <div>
     <AppTabs />
-    <router/>
+    <router-view />
   </div>
 </template>
 
 <script>
 import AppTabs from '@/components/AppTabs.vue';
-import router from './router';
+import router from './router/router';
 
 export default {
   components: {
     AppTabs,
-    router
-  }
+  },
+  router: router
 };
 </script>

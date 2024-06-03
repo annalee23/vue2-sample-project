@@ -7,7 +7,7 @@
 
       <v-tabs-items v-model="activeTab">
         <v-tab-item v-for="tab in tabs" :key="tab.label">
-          <component :is="tab.component" :data="tab.data" />
+          <component :is="tab.component" :data="tab.data" @select-order="navigateToOrder" />
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -15,8 +15,9 @@
 </template>
 
 <script>
-import MyComponent1 from '@/components/MyApplications.vue';
-import MyComponent2 from '@/components/MyAccounts.vue';
+import MyApplications from '@/components/MyApplications.vue';
+import MyAccounts from '@/components/MyAccounts.vue';
+import OrderDetails from '@/components/OrderDetails.vue';
 
 
 export default {
@@ -24,13 +25,31 @@ export default {
     return {
       activeTab: 0,
       tabs: [
-        { label: 'Заявки', component: MyComponent1 },
-        { label: 'Счета', component: MyComponent2 }
+        { label: 'Заявки', component: MyApplications, path: '/application' },
+        { label: 'Счета', component: MyAccounts, path: '/accounts' }
       ],
     };
   },
   methods: {
-
+    navigateToOrder(orderId) {
+      const existingTabIndex = this.tabs.findIndex(tab => tab.label.includes(orderId));
+      if (existingTabIndex !== -1) {
+        this.activeTab = existingTabIndex;
+      } else {
+        this.tabs.push({ label: 'Детали заявки ' + orderId, component: OrderDetails, path: '/order/' + orderId });
+        this.activeTab = this.tabs.length - 1;
+      }
+    }
+  },
+  watch: {
+    activeTab(newVal) {
+      const selectedTab = this.tabs[newVal];
+      if (selectedTab && selectedTab.path) {
+        this.$router.push({ path: selectedTab.path });
+      }
+    }
   }
 };
 </script>
+
+
