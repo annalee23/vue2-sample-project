@@ -6,7 +6,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="activeTab">
-        <v-tab-item v-for="tab in tabs" :key="tab.label">
+        <v-tab-item v-for="(tab, index) in tabs" :key="index">
           <component :is="tab.component" :data="tab.data" @select-order="navigateToOrder" />
         </v-tab-item>
       </v-tabs-items>
@@ -31,25 +31,37 @@ export default {
     };
   },
   methods: {
-    navigateToOrder(orderId) {
-      const existingTabIndex = this.tabs.findIndex(tab => tab.label.includes(orderId));
+    navigateToOrder(item) {
+      const existingTabIndex = this.tabs.findIndex(tab => tab.label.includes(item.num));
       if (existingTabIndex !== -1) {
         this.activeTab = existingTabIndex;
       } else {
-        this.tabs.push({ label: 'Детали заявки ' + orderId, component: OrderDetails, path: '/application/' + orderId });
+        this.tabs.push({ label: 'Заявка ' + item.num, component: OrderDetails, path: '/application/' + item.orderId });
         this.activeTab = this.tabs.length - 1;
+      }
+    },
+    updateActiveTabBasedOnRoute() {
+      const currentPath = this.$route.path;
+      const tabIndex = this.tabs.findIndex(tab => tab.path === currentPath);
+      if (tabIndex !== -1) {
+        this.activeTab = tabIndex;
       }
     }
   },
   watch: {
     activeTab(newVal) {
       const selectedTab = this.tabs[newVal];
-      if (selectedTab && selectedTab.path) {
+      if (selectedTab && selectedTab.path && this.$route.path !== selectedTab.path) {
         this.$router.push({ path: selectedTab.path });
       }
     }
+  },
+  created() {
+    this.updateActiveTabBasedOnRoute();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.updateActiveTabBasedOnRoute();
+    next();
   }
 };
 </script>
-
-

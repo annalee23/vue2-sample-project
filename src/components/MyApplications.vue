@@ -30,7 +30,7 @@
         <span :class="statusClass(item.state)">{{ item.state }}</span>
       </template>
       <template #[`item.num`]="{ item }">
-        <div @click="selectOrder(item.id)" style="cursor: pointer;">
+        <div @click="selectOrder(item.id, item.num)" style="cursor: pointer;">
           {{ item.num }}
         </div>
       </template>
@@ -154,8 +154,8 @@ export default {
         'status-reupload_fls': status === 'reupload_fls',
       };
     },
-    selectOrder(orderId) {
-      this.$emit('select-order', orderId);
+    selectOrder(orderId, num) {
+      this.$emit('select-order', {orderId, num});
 
     },
     openDialog() {
@@ -177,10 +177,8 @@ export default {
           this.editedItem.dadd = moment(this.editedItem.dadd).format('YYYY-MM-DD HH:mm');
         }
         if (this.editedItem.id > -1) {
-          // Редактирование существующей заявки
           Object.assign(this.ordersList[this.editedIndex], this.editedItem);
         } else {
-          // Создание новой заявки
           this.addNewItem(this.editedItem);
         }
         this.closeDialog();
