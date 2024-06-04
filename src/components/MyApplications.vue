@@ -12,7 +12,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="closeDelete">Отмена</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm">Да</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -115,7 +115,7 @@ export default {
     editedItem: {
       num: 0,
       stg: [],
-      dadd: moment().format('YYYY-MM-DD'),
+      dadd: moment().format('YYYY-MM-DD HH:mm'),
       client_name: "",
       state: "init",
       person_phone: ""
@@ -123,7 +123,7 @@ export default {
     defaultItem: {
       num: 0,
       stg: [],
-      dadd: moment().format('YYYY-MM-DD'),
+      dadd: moment().format('YYYY-MM-DD HH:mm'),
       client_name: "",
       state: "init",
       person_phone: ""
@@ -163,12 +163,18 @@ export default {
     },
     closeDialog() {
       this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
       //this.$refs.form.reset();
     },
     saveItem() {
       if (this.$refs.form.validate()) {
         if (!moment(this.editedItem.dadd).isValid()) {
-          this.editedItem.dadd = moment().format('YYYY-MM-DD');
+          this.editedItem.dadd = moment().format('YYYY-MM-DD HH:mm');
+        } else {
+          this.editedItem.dadd = moment(this.editedItem.dadd).format('YYYY-MM-DD HH:mm');
         }
         if (this.editedItem.id > -1) {
           // Редактирование существующей заявки
@@ -182,32 +188,33 @@ export default {
     },
     editItem(item) {
       this.editedIndex = this.ordersList.indexOf(item);
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
+      this.editedItem = Object.assign({}, item);
+      this.dialogTitle = "Редактировать заявку";
+      this.dialog = true;
     },
 
     deleteItem(item) {
       this.editedIndex = this.ordersList.indexOf(item);
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
       this.ordersList.splice(this.editedIndex, 1);
-      this.closeDelete()
+      this.closeDelete();
     },
     close() {
       this.dialog = false
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
-      })
+      });
     },
     closeDelete() {
-      this.dialogDelete = false
+      this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
       })
     },
   },
@@ -274,4 +281,3 @@ tr:hover {
   /* Светло-серый */
 }
 </style>
-

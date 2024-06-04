@@ -36,7 +36,7 @@ export default {
       if (existingTabIndex !== -1) {
         this.activeTab = existingTabIndex;
       } else {
-        this.tabs.push({ label: 'Детали заявки ' + orderId, component: OrderDetails, path: '/order/' + orderId });
+        this.tabs.push({ label: 'Детали заявки ' + orderId, component: OrderDetails, path: '/application/' + orderId });
         this.activeTab = this.tabs.length - 1;
       }
     }
