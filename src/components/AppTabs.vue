@@ -38,13 +38,27 @@ export default {
       } else {
         this.tabs.push({ label: 'Заявка ' + item.num, component: OrderDetails, path: '/application/' + item.orderId });
         this.activeTab = this.tabs.length - 1;
+        this.$router.push({ path: this.tabs[this.activeTab].path });
       }
     },
     updateActiveTabBasedOnRoute() {
       const currentPath = this.$route.path;
-      const tabIndex = this.tabs.findIndex(tab => tab.path === currentPath);
+      const tabIndex = this.tabs.findIndex(tab => currentPath === tab.path);
       if (tabIndex !== -1) {
         this.activeTab = tabIndex;
+      } else {
+        const match = currentPath.match(/^\/application\/(\d+)/);
+        if (match) {
+          const orderId = match[1];
+          const label = 'Заявка ' + orderId;
+          const existingOrderTabIndex = this.tabs.findIndex(tab => tab.label === label);
+          if (existingOrderTabIndex === -1) {
+            this.tabs.push({ label: label, component: OrderDetails, path: currentPath });
+            this.activeTab = this.tabs.length - 1;
+          } else {
+            this.activeTab = existingOrderTabIndex;
+          }
+        }
       }
     }
   },
