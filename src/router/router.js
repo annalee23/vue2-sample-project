@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import ApplicationsPage from '@/pages/ApplicationsPage.vue';
-import AccountsPage from '@/pages/AccountsPage.vue';
+import MyApplications from "@/components/MyApplications.vue";
+import MyAccounts from "@/components/MyAccounts.vue";
 import OrderDetails from '@/components/OrderDetails.vue';
 
 Vue.use(VueRouter);
@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/application',
-        component: ApplicationsPage,
+        component: MyApplications,
     },
     {
         path: '/application/:id',
@@ -19,7 +19,7 @@ const routes = [
     },
     {
         path: '/accounts',
-        component: AccountsPage,
+        component: MyAccounts,
     }
     
 ]
