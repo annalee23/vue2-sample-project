@@ -49,8 +49,8 @@ export default {
       } else {
         const match = currentPath.match(/^\/application\/(\d+)/);
         if (match) {
-          const orderId = match[1];
-          const label = 'Заявка ' + orderId;
+          //const orderId = match[1];
+          const label = 'Заявка ';
           const existingOrderTabIndex = this.tabs.findIndex(tab => tab.label === label);
           if (existingOrderTabIndex === -1) {
             this.tabs.push({ label: label, component: OrderDetails, path: currentPath });
