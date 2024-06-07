@@ -23,7 +23,10 @@
       </div>
     </div>
     <div v-else>
-      <p>Загрузка данных...</p>
+      <div class="no-data-message">
+        <p v-if="isNewOrder">Извините, данных по новым заявкам на сервере нет</p>
+        <p v-else>Загрузка данных...</p>
+      </div>
     </div>
   </v-card>
 </template>
@@ -44,6 +47,10 @@ export default {
   },
   methods: {
     fetchOrderDetails(id) {
+      if (parseInt(id) >= 6) {
+        this.order = null;
+        return;
+      }
       axios
         .get(`https://my-json-server.typicode.com/plushevy/demo/orders/${id}`)
         .then(response => {
@@ -55,6 +62,11 @@ export default {
     },
     formatDate(date) {
       return moment(date).format('DD.MM.YYYY HH:mm');
+    },
+  },
+  computed: {
+    isNewOrder() {
+      return parseInt(this.$route.params.id) >= 6;
     }
   }
 };
@@ -68,5 +80,17 @@ export default {
 h2 {
   margin-bottom: 20px;
   text-align: center;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-data-message p {
+  margin: 0;
 }
 </style>

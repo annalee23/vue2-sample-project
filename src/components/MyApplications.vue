@@ -6,7 +6,7 @@
           <h2>Список заявок</h2>
           <v-spacer></v-spacer>
           <v-btn class="my-4" color="primary" @click="openDialog()">Добавить заявку</v-btn>
-          <DialogDelete :dialog="dialogDelete" @close="closeDelete" @confirm="deleteItemConfirm" />
+          <DialogDelete :dialog="dialogDelete" @close="closeDialog" @confirm="deleteItem" />
         </v-toolbar>
       </template>
 
@@ -26,7 +26,7 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <BtnEditDelete :item="item" @edit="editItem" @delete="deleteItem" />
+        <BtnEditDelete :item="item" @edit="editItem" @delete="openDialog(item, 'delete')" />
       </template>
     </v-data-table>
 
@@ -64,6 +64,7 @@ export default {
     ],
     editedIndex: -1,
     editedItem: {
+      id: 0,
       num: 0,
       stg: [],
       dadd: moment().format('YYYY-MM-DD HH:mm'),
@@ -72,6 +73,7 @@ export default {
       person_phone: ""
     },
     defaultItem: {
+      id: 6,
       num: 0,
       stg: [],
       dadd: moment().format('YYYY-MM-DD HH:mm'),
@@ -79,17 +81,22 @@ export default {
       state: "init",
       person_phone: ""
     },
+    dialogMode: 'create', // 'create', 'edit', 'delete'
+    nextId: 6, 
   }),
   watch: {
     dialog(val) {
-      val || this.closeDialog()
+      if (!val) this.closeDialog();
     },
     dialogDelete(val) {
-      val || this.closeDelete()
+      if (!val) this.closeDialog();
     },
   },
   computed: {
     ...mapState(['ordersList']),
+    isNewOrder() {
+      return this.dialogMode === 'create';
+    }
   },
   methods: {
     ...mapMutations(['addNewItem']),
@@ -108,18 +115,37 @@ export default {
     selectOrder(orderId, num) {
       this.$emit('select-order', { orderId, num });
     },
-    openDialog() {
-      this.dialogTitle = "Создать заявку";
-      this.editedItem = Object.assign({}, this.defaultItem);
-      this.dialog = true;
+
+    openDialog(item = null, mode = 'create') {
+      this.dialogMode = mode;
+      this.dialogTitle = mode === 'create' ? "Создать заявку" : "Редактировать заявку";
+
+      if (mode === 'create') {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem.id = this.nextId++; 
+        this.editedIndex = -1;
+      } else {
+        this.editedIndex = this.ordersList.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+      }
+
+      if (mode === 'delete') {
+        this.dialogDelete = true;
+      } else {
+        this.dialog = true;
+      }
     },
+
     closeDialog() {
       this.dialog = false;
+      this.dialogDelete = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
+        this.dialogMode = 'create';
       });
     },
+
     saveItem(localEditedItem) {
       if (this.editedIndex > -1) {
         Object.assign(this.ordersList[this.editedIndex], localEditedItem);
@@ -128,27 +154,16 @@ export default {
       }
       this.closeDialog();
     },
+
     editItem(item) {
-      this.editedIndex = this.ordersList.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogTitle = "Редактировать заявку";
-      this.dialog = true;
+      this.openDialog(item, 'edit');
     },
-    deleteItem(item) {
-      this.editedIndex = this.ordersList.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-    deleteItemConfirm() {
-      this.ordersList.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
+
+    deleteItem() {
+      if (this.editedIndex > -1) {
+        this.ordersList.splice(this.editedIndex, 1);
+      }
+      this.closeDialog();
     },
   },
   mounted() {
