@@ -4,10 +4,10 @@
       <v-card-title>{{ dialogTitle }}</v-card-title>
       <v-card-text>
         <v-form ref="form">
-          <v-text-field v-model="localEditedItem.num" :rules="[rules.counter, rules.numIfNonEmpty]"
-            label="№ Заявки" required></v-text-field>
-          <v-text-field v-model="localEditedItem.stg" :rules="[rules.stgCheck, rules.max20Characters]"
-            label="Продукт" required></v-text-field>
+          <v-text-field v-model="localEditedItem.num" :rules="[rules.counter, rules.numIfNonEmpty]" label="№ Заявки"
+            required></v-text-field>
+          <v-text-field v-model="localEditedItem.stg" :rules="[rules.stgCheck, rules.max20Characters]" label="Продукт"
+            required></v-text-field>
           <v-row>
             <v-col cols="12" sm="6" md="4">
               <v-menu v-model="menu2" :close-on-content-click="false" :nudge-right="40" transition="scale-transition"
@@ -20,15 +20,15 @@
               </v-menu>
             </v-col>
           </v-row>
-          <v-text-field v-model="localEditedItem.client_name" :rules="[rules.client_nameCheck]"
-            label="Клиент" required></v-text-field>
+          <v-text-field v-model="localEditedItem.client_name" :rules="[rules.client_nameCheck]" label="Клиент"
+            required></v-text-field>
           <v-row>
             <v-col class="d-flex" cols="12" sm="6">
               <v-select v-model="localEditedItem.state" :items="statusOptions" label="Статус"></v-select>
             </v-col>
           </v-row>
-          <v-text-field v-model="localEditedItem.person_phone" :rules="[rules.personPhoneCheck]"
-            label="Телефон" required></v-text-field>
+          <v-text-field v-model="localEditedItem.person_phone" :rules="[rules.personPhoneCheck]" label="Телефон"
+            required></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -71,15 +71,16 @@ export default {
         'reupload_fls'
       ],
       rules: {
-        counter: value => value.length <= 8 || 'Максимум 8 символов',
+        counter: value => String(value).length <= 8 || 'Максимум 8 символов',
         numIfNonEmpty: value => {
           const pattern = /^[0-9]+$/;
           return value === '' || pattern.test(value) || 'Недопустимый номер заявки. Используйте только цифры';
         },
-        max20Characters: value => value.length <= 20 || 'Максимум 20 символов',
+        max20Characters: value => String(value).length <= 20 || 'Максимум 20 символов',
         stgCheck: value => {
+          value = String(value);
           const pattern = /^[a-zA-Zа-яА-Я.'"0-9\s]+$/;
-          return value === '' || pattern.test(value) || 'Используйте цифры (0-9) или буквы (a-z, A-Z, а-я, А-Я). Максимум 20 символов.';
+          return value === '' || pattern.test(value) || 'Используйте цифры (0-9) или буквы (a-z, A-Z, а-я, А-Я).';
         },
         client_nameCheck: value => {
           const pattern = /^[a-zA-Zа-яА-Я\s.'"0-9]+$/;
