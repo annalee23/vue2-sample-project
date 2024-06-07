@@ -7,7 +7,6 @@
           <v-spacer></v-spacer>
           <v-btn class="my-4" color="primary" @click="openDialog()">Добавить заявку</v-btn>
           <DialogDelete :dialog="dialogDelete" @close="closeDelete" @confirm="deleteItemConfirm" />
-
         </v-toolbar>
       </template>
 
@@ -27,13 +26,9 @@
       </template>
 
       <template #[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
+        <BtnEditDelete :item="item" @edit="editItem" @delete="deleteItem" />
       </template>
+
     </v-data-table>
 
     <v-dialog v-model="dialog" max-width="600px">
@@ -83,12 +78,14 @@
 import { mapMutations, mapState } from 'vuex';
 import moment from 'moment';
 import DialogDelete from './DialogDelete.vue';
+import BtnEditDelete from './BtnEditDelete.vue';
 
 
 
 export default {
   components: {
     DialogDelete,
+    BtnEditDelete,
   },
   data: () => ({
     menu2: false,
