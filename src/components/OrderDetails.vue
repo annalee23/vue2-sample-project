@@ -24,7 +24,7 @@
     </div>
     <div v-else>
       <div class="no-data-message">
-        <p v-if="isNewOrder">Извините, данных по новым заявкам на сервере нет</p>
+        <p v-if="isNewOrder">Извините, данных по новым заявкам на сервере нет :(</p>
         <p v-else>Загрузка данных...</p>
       </div>
     </div>
