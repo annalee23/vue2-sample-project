@@ -6,6 +6,9 @@ env:  export NODE_OPTIONS=--openssl-legacy-provider
 
 cache: npm
 
+env:
+  - NODE_OPTIONS=--openssl-legacy-provider
+  
 script: npm run build
 
 deploy:
