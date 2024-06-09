@@ -13,3 +13,7 @@ deploy:
  local_dir: dist
  on:
    branch: main
+
+jobs:
+  include:
+    - dist: focal
