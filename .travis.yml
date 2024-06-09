@@ -2,10 +2,11 @@ language: node_js
 node_js:
  - "node"
 
+env:  export NODE_OPTIONS=--openssl-legacy-provider
+
 cache: npm
 
-script: export NODE_OPTIONS=--openssl-legacy-provider
-npm run build
+script: npm run build
 
 deploy:
  provider: pages
