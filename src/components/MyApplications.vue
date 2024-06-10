@@ -3,7 +3,7 @@
     <v-data-table class="mt-10 elevation-1" :headers="headers" :items="ordersList">
       <template v-slot:top>
         <v-toolbar flat>
-          <h2>Список заявок</h2>
+          <h2 class="mr-4">Список заявок</h2>
           <v-spacer></v-spacer>
           <v-btn class="my-4" color="primary" @click="openDialog()">
             {{ isMobile ? '+' : 'Добавить заявку' }}
