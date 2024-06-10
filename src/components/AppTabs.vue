@@ -31,6 +31,9 @@ export default {
     };
   },
   methods: {
+    updateRoute(path) {
+      this.$router.push(path);
+    },
     navigateToOrder(item) {
       const existingTabIndex = this.tabs.findIndex(tab => tab.label.includes(item.num));
       if (existingTabIndex !== -1) {
