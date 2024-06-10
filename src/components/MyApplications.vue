@@ -1,6 +1,6 @@
 <template>
   <div class="mx-1">
-    <v-data-table :headers="headers" :items="ordersList" class="elevation-1">
+    <v-data-table class="mt-10 elevation-1" :headers="headers" :items="ordersList">
       <template v-slot:top>
         <v-toolbar flat>
           <h2>Список заявок</h2>
@@ -117,6 +117,7 @@ export default {
     },
 
     openDialog(item = null, mode = 'create') {
+      //console.log('Opening dialog:', { item, mode }); 
       this.dialogMode = mode;
       this.dialogTitle = mode === 'create' ? "Создать заявку" : "Редактировать заявку";
 
