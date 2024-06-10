@@ -4,7 +4,6 @@
 set -e
 
 # build
-export NODE_OPTIONS=--openssl-legacy-provider
 npm run build
 
 # navigate into the build output directory

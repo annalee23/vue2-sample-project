@@ -1,12 +1,11 @@
 {
-  "name": "vue2-sample-project",
+  "name": "test-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "deploy": "sh deploy.sh"
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -34,8 +33,7 @@
     "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-template-compiler": "^2.6.14",
     "vuetify-loader": "^1.7.0",
-    "webpack": "^4.47.0",
-    "gh-pages": "^3.1.0"
+    "webpack": "^4.47.0"
   },
   "eslintConfig": {
     "root": true,
