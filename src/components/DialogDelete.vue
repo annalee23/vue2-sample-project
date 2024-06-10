@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="localDialog" max-width="500px">
+  <v-dialog :fullscreen="isMobile" v-model="localDialog" max-width="500px">
     <v-card>
-      <v-card-title class="text-h5">Хотите удалить заявку?</v-card-title>
+      <v-card-title class="text-h5" style="margin-bottom: 20px;">Хотите удалить заявку?</v-card-title>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="onCancel">Отмена</v-btn>
@@ -22,7 +22,8 @@ export default {
   },
   data() {
     return {
-      localDialog: this.dialog
+      localDialog: this.dialog,
+      isMobile: false
     };
   },
   watch: {
@@ -32,6 +33,12 @@ export default {
     localDialog(val) {
       this.$emit('update:dialog', val);
     }
+  },
+  mounted() {
+    this.isMobile = window.innerWidth <= 600;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 600;
+    });
   },
   methods: {
     onCancel() {
@@ -45,4 +52,11 @@ export default {
 </script>
 
 <style scoped>
+.v-dialog__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
+
+
