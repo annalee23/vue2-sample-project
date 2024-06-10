@@ -3,11 +3,9 @@
     <v-data-table class="mt-10 elevation-1" :headers="headers" :items="ordersList">
       <template v-slot:top>
         <v-toolbar flat>
-          <h2 :class="{ 'mb-4': isMobile }">Список заявок</h2>
+          <h2>Список заявок</h2>
           <v-spacer></v-spacer>
-          <v-btn class="my-4" color="primary" @click="openDialog()">
-            {{ isMobile ? '+' : 'Добавить заявку' }}
-          </v-btn>
+          <v-btn class="my-4" color="primary" @click="openDialog()">Добавить заявку</v-btn>
           <DialogDelete :dialog="dialogDelete" @close="closeDialog" @confirm="deleteItem" />
         </v-toolbar>
       </template>
@@ -84,8 +82,7 @@ export default {
       person_phone: ""
     },
     dialogMode: 'create', // 'create', 'edit', 'delete'
-    nextId: 6,
-    isMobile: false
+    nextId: 6, 
   }),
   watch: {
     dialog(val) {
@@ -126,7 +123,7 @@ export default {
 
       if (mode === 'create') {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedItem.id = this.nextId++;
+        this.editedItem.id = this.nextId++; 
         this.editedIndex = -1;
       } else {
         this.editedIndex = this.ordersList.indexOf(item);
@@ -172,10 +169,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('fetchOrdersList');
-    this.isMobile = window.innerWidth <= 600;
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth <= 600;
-    });
   }
 };
 </script>
@@ -184,10 +177,6 @@ export default {
 h2 {
   margin-bottom: 20px;
   text-align: center;
-}
-
-h2.mb-4 {
-  margin-bottom: 20px; /* Измените значение, если нужно больше отступа */
 }
 
 .v-data-footer {
