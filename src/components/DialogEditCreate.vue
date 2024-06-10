@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="internalDialog" max-width="600px">
+  <v-dialog :fullscreen="isMobile" v-model="internalDialog" max-width="600px">
     <v-card>
       <v-card-title>{{ dialogTitle }}</v-card-title>
       <v-card-text>
@@ -90,8 +90,15 @@ export default {
           const pattern = /^[0-9]+$/;
           return value === '' || (value.length === 11 && pattern.test(value)) || 'Недопустимый номер телефона. Должен содержать ровно 11 цифр.';
         }
-      }
+      },
+      isMobile: false
     };
+  },
+  mounted() {
+    this.isMobile = window.innerWidth <= 600;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 600;
+    });
   },
   watch: {
     dialog(val) {
