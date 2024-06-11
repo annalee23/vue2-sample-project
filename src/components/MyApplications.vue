@@ -1,11 +1,14 @@
 <template>
   <div class="mx-1">
-    <v-data-table :headers="headers" :items="ordersList" class="elevation-1">
+    <v-data-table class="mt-10 elevation-1" :headers="headers" :items="ordersList">
       <template v-slot:top>
         <v-toolbar flat>
-          <h2>Список заявок</h2>
+          <h2 v-if="!isMobile" class="mr-4">Список заявок</h2>
+          <h3 v-else class="mr-4">Список заявок</h3>
           <v-spacer></v-spacer>
-          <v-btn class="my-4" color="primary" @click="openDialog()">Добавить заявку</v-btn>
+          <v-btn class="my-4" color="primary" @click="openDialog()">
+            {{ isMobile ? '+' : 'Добавить заявку' }}
+          </v-btn>
           <DialogDelete :dialog="dialogDelete" @close="closeDialog" @confirm="deleteItem" />
         </v-toolbar>
       </template>
@@ -82,7 +85,8 @@ export default {
       person_phone: ""
     },
     dialogMode: 'create', // 'create', 'edit', 'delete'
-    nextId: 6, 
+    nextId: 6,
+    isMobile: false
   }),
   watch: {
     dialog(val) {
@@ -117,12 +121,13 @@ export default {
     },
 
     openDialog(item = null, mode = 'create') {
+      //console.log('Opening dialog:', { item, mode });
       this.dialogMode = mode;
       this.dialogTitle = mode === 'create' ? "Создать заявку" : "Редактировать заявку";
 
       if (mode === 'create') {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedItem.id = this.nextId++; 
+        this.editedItem.id = this.nextId++;
         this.editedIndex = -1;
       } else {
         this.editedIndex = this.ordersList.indexOf(item);
@@ -168,6 +173,10 @@ export default {
   },
   mounted() {
     this.$store.dispatch('fetchOrdersList');
+    this.isMobile = window.innerWidth <= 600;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 600;
+    });
   }
 };
 </script>
