@@ -1,6 +1,6 @@
 <template>
   <div class="mx-1">
-    <v-data-table class="mt-10 elevation-1" :headers="headers" :items="ordersList">
+    <v-data-table :class="{ 'mt-10': !isMobile }" class="elevation-1" :headers="headers" :items="ordersList">
       <template v-slot:top>
         <v-toolbar flat>
           <h2 class="mr-4">Список заявок</h2>
@@ -120,7 +120,6 @@ export default {
     },
 
     openDialog(item = null, mode = 'create') {
-      //console.log('Opening dialog:', { item, mode }); 
       this.dialogMode = mode;
       this.dialogTitle = mode === 'create' ? "Создать заявку" : "Редактировать заявку";
 
@@ -186,59 +185,59 @@ h2 {
   text-align: center;
 }
 
-h2.mb-4 {
-  margin-bottom: 20px; /* Измените значение, если нужно больше отступа */
+@media (max-width: 600px) {
+  .mx-1 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
 }
 
-.v-data-footer {
-  display: flex;
-  justify-content: flex-end;
-}
+  .v-data-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
 
-.v-data-footer__pagination,
-.v-data-footer__select {
-  margin-left: auto;
-}
+  .v-data-footer__pagination,
+  .v-data-footer__select {
+    margin-left: auto;
+  }
 
-.status-init {
-  color: #ff6f00;
-  /* Ярко-оранжевый */
-  font-weight: bold;
-  padding: 5px;
-}
+  .status-init {
+    color: #ff6f00;
+    /* Ярко-оранжевый */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-error {
-  color: #d32f2f;
-  /* Ярко-красный */
-  font-weight: bold;
-  padding: 5px;
-}
+  .status-error {
+    color: #d32f2f;
+    /* Ярко-красный */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-upload_docs {
-  color: #0288d1;
-  /* Ярко-голубой */
-  font-weight: bold;
-  padding: 5px;
-}
+  .status-upload_docs {
+    color: #0288d1;
+    /* Ярко-голубой */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-process {
-  color: #388e3c;
-  /* Ярко-зеленый */
-  font-weight: bold;
-  padding: 5px;
-}
+  .status-process {
+    color: #388e3c;
+    /* Ярко-зеленый */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-.status-reupload_fls {
-  color: #7b1fa2;
-  /* Ярко-фиолетовый */
-  font-weight: bold;
-  padding: 5px;
-}
+  .status-reupload_fls {
+    color: #7b1fa2;
+    /* Ярко-фиолетовый */
+    font-weight: bold;
+    padding: 5px;
+  }
 
-tr:hover {
-  background-color: #f5f5f5;
-  /* Светло-серый */
-}
-</style>
-
-
+  tr:hover {
+    background-color: #f5f5f5;
+    /* Светло-серый */
+  }</style>
