@@ -30,6 +30,5 @@ const routes = [
 
 export default new VueRouter({
     mode: 'history',
-    base: '/vue2-sample-project/',
     routes
 });

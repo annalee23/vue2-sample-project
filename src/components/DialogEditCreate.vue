@@ -97,9 +97,6 @@ export default {
     dialog(val) {
       this.internalDialog = val;
     },
-    internalDialog(val) {
-      this.$emit('update:dialog', val);
-    },
     editedItem(val) {
       this.localEditedItem = Object.assign({}, val);
     }

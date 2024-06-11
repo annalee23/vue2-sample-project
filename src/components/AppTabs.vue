@@ -31,9 +31,6 @@ export default {
     };
   },
   methods: {
-    updateRoute(path) {
-      this.$router.push(path);
-    },
     navigateToOrder(item) {
       const existingTabIndex = this.tabs.findIndex(tab => tab.label.includes(item.num));
       if (existingTabIndex !== -1) {
@@ -52,6 +49,7 @@ export default {
       } else {
         const match = currentPath.match(/^\/application\/(\d+)/);
         if (match) {
+          //const orderId = match[1];
           const label = 'Заявка ';
           const existingOrderTabIndex = this.tabs.findIndex(tab => tab.label === label);
           if (existingOrderTabIndex === -1) {
