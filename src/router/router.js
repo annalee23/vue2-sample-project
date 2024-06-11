@@ -29,7 +29,7 @@ const routes = [
 ]
 
 export default new VueRouter({
-    mode: 'history',
+    mode: 'hash',
     base: '/vue2-sample-project/',
     routes
 });

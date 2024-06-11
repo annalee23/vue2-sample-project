@@ -4,7 +4,7 @@
       <template v-slot:top>
         <v-toolbar flat>
           <h2 v-if="!isMobile" class="mr-4">Список заявок</h2>
-          <h3 v-else class="mr-4">Список заявок</h3>
+          <h3 v-else class="mr-4 my-10">Список заявок</h3>
           <v-spacer></v-spacer>
           <v-btn class="my-4" color="primary" @click="openDialog()">
             {{ isMobile ? '+' : 'Добавить заявку' }}
