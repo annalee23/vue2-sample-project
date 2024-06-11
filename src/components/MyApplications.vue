@@ -5,9 +5,7 @@
         <v-toolbar flat>
           <h2 class="mr-4">Список заявок</h2>
           <v-spacer></v-spacer>
-          <v-btn class="my-4" color="primary" @click="openDialog()">
-            {{ isMobile ? '+' : 'Добавить заявку' }}
-          </v-btn>
+          <v-btn class="my-4" color="primary" @click="openDialog()">Добавить заявку</v-btn>
           <DialogDelete :dialog="dialogDelete" @close="closeDialog" @confirm="deleteItem" />
         </v-toolbar>
       </template>
@@ -84,8 +82,7 @@ export default {
       person_phone: ""
     },
     dialogMode: 'create', // 'create', 'edit', 'delete'
-    nextId: 6,
-    isMobile: false
+    nextId: 6, 
   }),
   watch: {
     dialog(val) {
@@ -125,7 +122,7 @@ export default {
 
       if (mode === 'create') {
         this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedItem.id = this.nextId++;
+        this.editedItem.id = this.nextId++; 
         this.editedIndex = -1;
       } else {
         this.editedIndex = this.ordersList.indexOf(item);
@@ -171,10 +168,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('fetchOrdersList');
-    this.isMobile = window.innerWidth <= 600;
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth <= 600;
-    });
   }
 };
 </script>
@@ -183,13 +176,6 @@ export default {
 h2 {
   margin-bottom: 20px;
   text-align: center;
-}
-
-@media (max-width: 600px) {
-  .mx-1 {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-  }
 }
 
   .v-data-footer {
